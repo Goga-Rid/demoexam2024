@@ -9,7 +9,7 @@ public class UsersDAO {
 
 //  Добавление нового пользователя
     public void addUser(Users user) throws SQLException {
-        String sql = "INSERT INTO Users (fio, phone, login, password, type) VALUES (?, ?, ?, ?, ?) RETURNING userID";
+        String sql = "INSERT INTO Users (fio, phone, login, password, type) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 

@@ -25,4 +25,12 @@ public class Comments {
         this.masterID = masterID;
         this.message = message;
     }
+
+    public Comments(int requestID, int clientID, int masterID, String message, int commentID) {
+        this.requestID = requestID;
+        this.clientID = clientID;
+        this.masterID = masterID;
+        this.message = message;
+        this.commentID = commentID;
+    }
 }

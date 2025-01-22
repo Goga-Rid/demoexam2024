@@ -25,7 +25,7 @@ public class RequestsDAO {
             stmt.executeUpdate();
             System.out.println("Заявка успешно создана!");
         }catch (SQLException e) {
-            throw new SQLException("!!!При создании заявки произошла ошибка!!!");
+            throw new SQLException("!!!При создании заявки произошла ошибка:" + e.getMessage() + "!!!");
         }
     }
 

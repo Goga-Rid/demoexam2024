@@ -23,7 +23,7 @@ public class RequestsDAO {
             stmt.setInt(8, request.getMasterID());
             stmt.setInt(9, request.getClientID());
             stmt.executeUpdate();
-            System.out.println("SUCCESSFULLY add book!");
+            System.out.println("Заявка успешно создана!");
         }catch (SQLException e) {
             throw new SQLException("!!!При создании заявки произошла ошибка!!!");
         }
@@ -37,15 +37,17 @@ public class RequestsDAO {
         try (Connection conn = dbConnection.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Requests request = new Requests(
+                        rs.getInt("requestID"),
+                        rs.getDate("startDate"),
                         rs.getString("orgTechType"),
                         rs.getString("orgTechModel"),
                         rs.getString("problemDescription"),
+                        rs.getString("requestStatus"),
+                        rs.getDate("completionDate"),
+                        rs.getString("repairParts"),
                         rs.getInt("masterID"),
                         rs.getInt("clientID")
                 );
-                request.setRequestStatus(rs.getString("requestStatus"));
-                request.setCompletionDate(rs.getDate("completionDate"));
-                request.setRepairParts(rs.getString("repairParts"));
                 requests.add(request);
             }
         } catch (SQLException e) {
@@ -54,6 +56,69 @@ public class RequestsDAO {
         return requests;
     }
 
+//    Изменение этапа выполнения, описания проблемы и ответственного за работу
+    public void updateRequestDetails(int requestID, String newStage, String newDescription, Integer newMasterID) throws SQLException {
+        String sql = "UPDATE Requests SET requestStatus = ?, problemDescryption = ?, masterID = ? WHERE requestID = ?";
+
+        try (Connection conn = dbConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newStage != null ? newStage : "Новая заявка");
+            stmt.setString(2, newDescription != null ? newDescription : "");
+            stmt.setInt(3, newMasterID != null ? newMasterID : 0); // Если null, не обновляем мастера
+            stmt.setInt(4, requestID);
+            stmt.executeUpdate();
+            System.out.println("Изменения полей заявок было успешным");
+        } catch (SQLException e) {
+            throw new SQLException("!!!При изменении полей заявки возникла ошибка:" + e.getMessage() + "!!!");
+        }
+    }
+
+//     Поиск заявки по номеру или по параметрам
+    public List<Requests> searchRequests (String searchTerm) throws SQLException {
+        List<Requests> requests = new ArrayList<>();
+        String sql = "SELECT * FROM Requests WHERE requestID::TEXT LIKE ? " +
+                "OR orgTechType ILIKE ? OR orgTechModel ILIKE ? OR clientID ILIKE ?";
+
+        try (Connection conn = dbConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            String searchPattern = "%" + searchTerm + "%";
+            stmt.setString(1, searchPattern);
+            stmt.setString(2, searchPattern);
+            stmt.setString(3, searchPattern);
+            stmt.setString(4, searchPattern);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Requests request = new Requests(
+                        rs.getInt("requestID"),
+                        rs.getDate("startDate"),
+                        rs.getString("orgTechType"),
+                        rs.getString("orgTechModel"),
+                        rs.getString("problemDescription"),
+                        rs.getString("requestStatus"),
+                        rs.getDate("completionDate"),
+                        rs.getString("repairParts"),
+                        rs.getInt("masterID"),
+                        rs.getInt("clientID")
+                );
+                requests.add(request);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("!!!При поиске заявки возникла ошибка:" + e.getMessage() + "!!!");
+        }
+        return requests;
+    }
+
+//    Добавление мастера к заявке
+    public void assignMasterToRequest(int requestID, int masterID) throws SQLException {
+        String sql = "UPDATE Requests SET masterID = ? WHERE requestID = ?";
+
+        try (Connection conn = dbConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, masterID);
+            stmt.setInt(2, requestID);
+            stmt.executeUpdate();
+            System.out.println("Мастер успешно был добавлен к другой заявке");
+        } catch (SQLException e) {
+            throw new SQLException("!!!При добавлении мастера к другой заявке возникла ошибка:" + e.getMessage() + "!!!");
+        }
+    }
 
 
 }

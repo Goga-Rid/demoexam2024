@@ -41,7 +41,7 @@ public class RequestsDAO {
                         rs.getDate("startDate"),
                         rs.getString("orgTechType"),
                         rs.getString("orgTechModel"),
-                        rs.getString("problemDescription"),
+                        rs.getString("problemDescryption"),
                         rs.getString("requestStatus"),
                         rs.getDate("completionDate"),
                         rs.getString("repairParts"),

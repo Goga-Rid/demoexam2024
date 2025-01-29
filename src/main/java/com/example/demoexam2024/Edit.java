@@ -52,8 +52,7 @@ public class Edit {
             problemDescriptionField.setText(request.getProblemDescription());
             masterIDField.setText(String.valueOf(request.getMasterID()));
         } else {
-            requestStatusLabel.setText("Заявка не выбрана");
-            /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ТУТ НАДО ДОДЕЛАТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+            showAlert("Ошибка", "Заявка не выбрана!", Alert.AlertType.ERROR);
         }
     }
 

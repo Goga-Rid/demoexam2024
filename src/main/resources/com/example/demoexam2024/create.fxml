@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="486.0" prefWidth="454.0" spacing="10" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demoexam2024.Create">
+    <Label text="Вид оргтехники:" />
+    <TextField fx:id="orgTechTypeField" />
+
+    <Label text="Модель:" />
+    <TextField fx:id="orgTechModelField" />
+
+    <Label text="Описание проблемы:" />
+    <TextField fx:id="problemDescriptionField" />
+
+    <Label text="ID мастера:" />
+    <TextField fx:id="masterIDField" />
+
+    <Label text="ID клиента:" />
+    <TextField fx:id="clientIDField" />
+
+    <Button onAction="#createRequest" text="Создать заявку" />
+</VBox>

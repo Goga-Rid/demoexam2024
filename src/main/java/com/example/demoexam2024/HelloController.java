@@ -5,10 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
@@ -47,7 +44,7 @@ public class HelloController {
     private DBConnection dbConnection = new DBConnection();
 
     @FXML
-    public void initialize(){
+    public void initialize() {
 
         try {
 //          Получение подлючения
@@ -65,18 +62,23 @@ public class HelloController {
             TableRow<Requests> row = new TableRow<>();
             row.setOnMouseClicked(mouseEvent -> {
                 if (mouseEvent.getClickCount() == 2 && mouseEvent.getButton() == MouseButton.PRIMARY) {
-                    Requests rowData = row.getItem();
-                    Stage stage = new Stage();
-                    FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("edit.fxml"));
-                    try {
-                        Scene scene = new Scene(fxmlLoader.load(), 1000, 500);
-                        Edit secondController = fxmlLoader.getController();
-                        secondController.setData(rowData, stage);
-                        stage.setTitle("Изменение заявки");
-                        stage.setScene(scene);
-                        stage.show();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                    Requests rowData = row.getItem(); // Получаем данные из строки таблицы
+                    if (rowData != null) { // Проверяем, есть ли данные в строке
+                        Stage stage = new Stage();
+                        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("edit.fxml"));
+                        try {
+                            Scene scene = new Scene(fxmlLoader.load(), 1000, 500);
+                            Edit secondController = fxmlLoader.getController();
+                            secondController.setData(rowData, stage); // Передаем данные и Stage в контроллер
+                            stage.setTitle("Изменение заявки");
+                            stage.setScene(scene);
+                            stage.show();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        showAlert("Внимание!", "Вы выбрали пустую строку в таблице заявок", Alert.AlertType.WARNING);
+                        showConfirmation("Добавление новой заявки", "Желаете ли вы создать новую заявку?");
                     }
                 }
             });
@@ -117,5 +119,45 @@ public class HelloController {
         } catch (Exception e) {
             e.getMessage();
         }
+    }
+
+    // Метод для показа уведомлений
+    private void showAlert(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showConfirmation(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        // Добавляем кнопки "Да" и "Нет"
+        ButtonType buttonTypeYes = new ButtonType("Да", ButtonBar.ButtonData.YES);
+        ButtonType buttonTypeNo = new ButtonType("Нет", ButtonBar.ButtonData.NO);
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+        // Обрабатываем выбор пользователя
+        alert.showAndWait().ifPresent(buttonType -> {
+            if (buttonType == buttonTypeYes) {
+                Stage stage = new Stage();
+                FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("create.fxml"));
+                try {
+                    Scene scene = new Scene(fxmlLoader.load(), 1000, 500);
+                    Create thirdController = fxmlLoader.getController();
+                    stage.setTitle("Создание заявки");
+                    stage.setScene(scene);
+                    stage.show();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } else if (buttonType == buttonTypeNo) {
+                System.out.println("Пользователь выбрал 'Нет'");
+            }
+        });
     }
 }

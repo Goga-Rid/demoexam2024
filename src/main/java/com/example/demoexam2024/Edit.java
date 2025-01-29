@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
@@ -15,8 +16,7 @@ public class Edit {
     @FXML
     private ComboBox<String> requestStatusComboBox;
 
-    @FXML
-    private Button saveButton;
+    private Stage stage;
 
     @FXML
     private TextField problemDescriptionField;
@@ -44,8 +44,9 @@ public class Edit {
     }
 
     // Метод для установки данных из выбранной строки таблицы
-    public void setData(Requests request) {
+    public void setData(Requests request, Stage stage) {
         this.selectedRequest = request;
+        this.stage = stage;
         if (request != null) {
             requestStatusComboBox.setValue(request.getRequestStatus());
             problemDescriptionField.setText(request.getProblemDescription());
@@ -75,6 +76,8 @@ public class Edit {
                     selectedRequest.getProblemDescription(),
                     selectedRequest.getMasterID()
             );
+
+            stage.close();
 
             // Показываем уведомление об успешном обновлении
             showAlert("Успех", "Статус заявки успешно обновлен!", Alert.AlertType.INFORMATION);

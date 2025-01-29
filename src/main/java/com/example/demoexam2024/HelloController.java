@@ -71,7 +71,7 @@ public class HelloController {
                     try {
                         Scene scene = new Scene(fxmlLoader.load(), 1000, 500);
                         Edit secondController = fxmlLoader.getController();
-                        secondController.setData(rowData);
+                        secondController.setData(rowData, stage);
                         stage.setTitle("Изменение заявки");
                         stage.setScene(scene);
                         stage.show();

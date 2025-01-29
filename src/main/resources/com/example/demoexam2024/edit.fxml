@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.demoexam2024.Edit"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demoexam2024.Edit">
+    <Label fx:id="requestStatusLabel" text="Статус заявки:" />
+   <ComboBox prefWidth="150.0" fx:id="requestStatusComboBox" maxWidth="600.0"/>
+    <Label fx:id="problemDescriptionLabel" text="Описание проблемы:" />
+    <TextField fx:id="problemDescriptionField" maxWidth="600.0"/>
+    <Label fx:id="masterIDLabel" text="Ответственный за выполнение работ(id):" />
+    <TextField fx:id="masterIDField" maxWidth="600.0"/>
+    <Button mnemonicParsing="false" onAction="#saveChanges" text="Сохранить" fx:id="saveButton" />
 
-</AnchorPane>
+</VBox>

@@ -1,4 +1,4 @@
-module com.example.demoexam2024 {
+module com.example.demoexam {
     requires javafx.controls;
     requires javafx.fxml;
     requires static lombok;

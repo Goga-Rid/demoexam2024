@@ -43,7 +43,7 @@ public class Requests {
         this.orgTechType = orgTechType;
         this.orgTechModel = orgTechModel;
         this.problemDescription = problemDescription;
-        this.requestStatus = "Создана";
+        this.requestStatus = "Новая заявка";
         this.masterID = masterID;
         this.clientID = clientID;
     }

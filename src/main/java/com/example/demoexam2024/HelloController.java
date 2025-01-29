@@ -3,12 +3,17 @@ package com.example.demoexam2024;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.stage.Stage;
 
-import java.sql.Connection;
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
@@ -43,6 +48,7 @@ public class HelloController {
 
     @FXML
     public void initialize(){
+
         try {
 //          Получение подлючения
             dbConnection.getConnection();
@@ -54,6 +60,28 @@ public class HelloController {
         } catch (SQLException e) {
             welcomeText.setText("Error Date Base connection!");
         }
+
+        table.setRowFactory(tv -> {
+            TableRow<Requests> row = new TableRow<>();
+            row.setOnMouseClicked(mouseEvent -> {
+                if (mouseEvent.getClickCount() == 2 && mouseEvent.getButton() == MouseButton.PRIMARY) {
+                    Requests rowData = row.getItem();
+                    Stage stage = new Stage();
+                    FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("edit.fxml"));
+                    try {
+                        Scene scene = new Scene(fxmlLoader.load(), 1000, 500);
+                        Edit secondController = fxmlLoader.getController();
+                        secondController.setData(rowData);
+                        stage.setTitle("Изменение заявки");
+                        stage.setScene(scene);
+                        stage.show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+            return row;
+        });
     }
 
     @FXML
